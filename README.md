@@ -14,8 +14,6 @@ Given AWS and access to all open source tooling, design a system for streaming o
 
 ![Data Streaming](https://github.com/ChaudharyAnshul/Order-Transaction-Data-Pipeline-Design/blob/main/design%20image/Data_pipeline_Design.drawio.png)
 
-This diagram illustrates a data streaming pipeline using AWS services. Let's break down the components and the flow step by step:
-
 1. **Data Source**:
    - Represents the input sources for the data. Multiple sources are funneling data into the pipeline.
 
@@ -50,6 +48,73 @@ This diagram illustrates a data streaming pipeline using AWS services. Let's bre
 
 ![New Orders](https://github.com/ChaudharyAnshul/Order-Transaction-Data-Pipeline-Design/blob/main/design%20image/new_order.drawio.png)
 
+1. **New Order (6)**:
+   - The process starts when a new order is received.
+
+2. **AWS Managed Workflow (Airflow)**:
+   - The workflow is managed by AWS Managed Workflows for Apache Airflow, which orchestrates the sequence of tasks.
+
+3. **Lambda Functions**:
+   - **Construct Order Object**: A Lambda function constructs the order object and updates the temporary instance.
+   - **Check Payment Status**: Lambda function checks the payment status of the order. 
+     - If the payment fails, it updates the status in DynamoDB and sends a failure notification to the customer via Amazon SES.
+   - **Confirm Order**: If the payment is confirmed, this Lambda function confirms the order and sends a confirmation notification to the customer via Amazon SES.
+   - **Load Order Data**: The order data is loaded into AWS Redshift for further analysis and reporting and Temporary instance is deleted.
+
+4. **Amazon SES**:
+   - Used to send confirmation or failure emails to the customer based on the order status.
+
+5. **AWS SNS**:
+   - Sends notifications to the packaging team once the order is confirmed.
+
+6. **DynamoDB Temporary Storage**:
+   - Stores temporary data and updates related to the order processing.
+
+7. **EventBridge Scheduler**:
+   - Periodically triggers a Lambda function to reprocess orders if needed.
+
+8. **AWS Redshift**:
+   - Stores the finalized order data for analysis and reporting.
+
 ![Return Orders](https://github.com/ChaudharyAnshul/Order-Transaction-Data-Pipeline-Design/blob/main/design%20image/return_order.drawio.png)
 
+1. **Return Order (7)**:
+   - The process starts when a return order is received.
+
+2. **AWS Managed Workflow (Airflow)**:
+   - The workflow is managed by AWS Managed Workflows for Apache Airflow, which orchestrates the sequence of tasks.
+
+3. **Lambda Functions**:
+   - **Construct Return Object**: A Lambda function constructs the return order object.
+   - **Process Return**: Lambda function processes the return by calling a fine tuned LLM on Sagemaker.
+   - **Load Return Data**: The return data is loaded into AWS Redshift for further analysis and reporting.
+
+4. **Custom LLM Model**:
+   - A custom large language model (LLM) is used to approve returns. The return status is updated based on the approval.
+
+5. **Amazon SES**:
+   - Sends the return status email to the customer.
+
+6. **DynamoDB Temporary Storage**:
+   - Stores temporary data and updates related to the return order processing.
+   - The data is updated by various Lambda functions during the process.
+
+7. **AWS Redshift**:
+   - Stores the finalized return data for analysis and reporting.
+
 ![Update Orders](https://github.com/ChaudharyAnshul/Order-Transaction-Data-Pipeline-Design/blob/main/design%20image/update_order.drawio.png)
+
+1. **Update Order (8)**:
+   - The process starts when a Update order is received.
+
+2. **AWS Managed Workflow (Airflow)**:
+   - The workflow is managed by AWS Managed Workflows for Apache Airflow, which orchestrates the sequence of tasks.
+
+3. **Lambda Functions**:
+   - **Update**: A Lambda function to Update the order. Sends notification to users/shipping team based on the updated status.
+
+4. **Amazon SES**:
+   - Sends the status email to the customer.
+
+5. **AWS SNS**:
+   - Sends notifications to the Shipping team.
