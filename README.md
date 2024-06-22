@@ -118,3 +118,37 @@ Given AWS and access to all open source tooling, design a system for streaming o
 
 5. **AWS SNS**:
    - Sends notifications to the Shipping team.
+  
+### 3. Schema
+
+![Data Streaming](https://github.com/ChaudharyAnshul/Order-Transaction-Data-Pipeline-Design/blob/main/design%20image/schema.drawio.jpg)
+
+### 4. Actionable Insights
+
+1. **Cash Flow Forecasts**:
+   - Analyze transaction data to identify patterns in revenue and expenditures.
+   - Use time-series forecasting models to predict future cash flows.
+
+2. **Product Performance Analysis**:
+   - Track the sales performance of each product.
+   - Identify best-selling products and those with high profit rates.
+
+3. **Customer Behavior Trends**:
+   - Analyze purchasing patterns and customer demographics.
+   - Use clustering algorithms to segment customers based on buying behavior.
+
+4. **Return Reasons and Sentiment Analysis**:
+   - Perform sentiment analysis on return comments to understand customer satisfaction.
+   - Identify common issues leading to returns. Use this data to improve product quality or customer service processes.
+
+5. **Geographical Sales Trends**:
+   - Analyze GPS data to determine high-performing regions.
+   - Identify geographical areas with high sales or high return rates.
+  
+### 5. Key Performance Indicators
+
+1. **Total Revenue**: Measure the total revenue generated from all sales.
+2. **Return Rate**: Measure the percentage of orders that are returned to identify potential product or service issues.
+3. **Inventory Turnover Rate**: Calculate how often inventory is sold and replaced over a specific period to optimize stock levels
+4. **Order Accuracy Rate**: Measure the percentage of orders that are fulfilled correctly to ensure quality control.
+5. **Customer Satisfaction Score**: Assess customer satisfaction through surveys or feedback to understand overall customer experience.
